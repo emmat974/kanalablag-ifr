@@ -1,20 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Tous les meilleurs blagues réunionnaises{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="row my-2">
+    <div class="col-md-12">
+        <ul class="nav justify-content-center">
+            {% for category in categories %}
+            <li class="nav-item">
+                <a class="btn btn-dark mx-2" href="{{ path("app_home_joke", {id: category.id}) }}">{{ category.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/tonyemma/Documents/ifr/Cours dev/CD5/Kanalablag/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/tonyemma/Documents/ifr/Cours dev/CD5/Kanalablag/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
+<div class="row">
+    <div class="col-md-12 my-2">
+        <h1 class="fs-2"> Tous nos dernières blagues </h1>
+    </div>
+    {% for joke in jokes %}
+    <div class="col-md-12 border p-3 bg-dark text-white rounded my-1">
+        <h2 class="fs-4"> {{ joke.category }}</h2>
+        <p> {{ joke.description }}</p>
+        <hr>
+        <p> Par {{ joke.user.email }} </p>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tous les meilleurs blagues réunionnaises sur {{ category.name }}{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-md-12 my-2">
+        <h1 class="fs-2"> Tous nos dernières blagues sur : {{ category.name }}</h1>
+    </div>
+    {% for joke in jokes %}
+    <div class="col-md-12 border p-3 bg-dark text-white rounded my-1">
+        <h2 class="fs-4"> {{ joke.category }}</h2>
+        <p> {{ joke.description }}</p>
+        <hr>
+        <p> Par {{ joke.user.email }} </p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

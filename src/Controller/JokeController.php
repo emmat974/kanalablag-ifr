@@ -26,6 +26,7 @@ class JokeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $joke = new Joke();
+        $joke->setUser($this->getUser());
         $form = $this->createForm(JokeType::class, $joke);
         $form->handleRequest($request);
 
@@ -53,6 +54,10 @@ class JokeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_joke_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Joke $joke, EntityManagerInterface $entityManager): Response
     {
+        if ($joke->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
         $form = $this->createForm(JokeType::class, $joke);
         $form->handleRequest($request);
 
@@ -71,7 +76,11 @@ class JokeController extends AbstractController
     #[Route('/{id}', name: 'app_joke_delete', methods: ['POST'])]
     public function delete(Request $request, Joke $joke, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$joke->getId(), $request->request->get('_token'))) {
+        if ($joke->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $joke->getId(), $request->request->get('_token'))) {
             $entityManager->remove($joke);
             $entityManager->flush();
         }
