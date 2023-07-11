@@ -18,7 +18,7 @@ class JokeController extends AbstractController
     public function index(JokeRepository $jokeRepository): Response
     {
         return $this->render('joke/index.html.twig', [
-            'jokes' => $jokeRepository->findAll(),
+            'jokes' => $jokeRepository->findBy(['user' => $this->getUser()]),
         ]);
     }
 
