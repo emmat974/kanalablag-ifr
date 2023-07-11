@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestampable;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Joke::class)]
+    private Collection $jokes;
+
+    public function __construct()
+    {
+        $this->jokes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,5 +112,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Joke>
+     */
+    public function getJokes(): Collection
+    {
+        return $this->jokes;
+    }
+
+    public function addJoke(Joke $joke): static
+    {
+        if (!$this->jokes->contains($joke)) {
+            $this->jokes->add($joke);
+            $joke->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJoke(Joke $joke): static
+    {
+        if ($this->jokes->removeElement($joke)) {
+            // set the owning side to null (unless already changed)
+            if ($joke->getUser() === $this) {
+                $joke->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
