@@ -14,9 +14,6 @@ class JokeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, [
-                "label" => "Titre"
-            ])
             ->add('description', TextareaType::class, [
                 "label" => "Blague"
             ])
