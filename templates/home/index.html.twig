@@ -9,24 +9,15 @@
         <ul class="nav justify-content-center">
             {% for category in categories %}
             <li class="nav-item">
-                <a class="btn btn-dark mx-2" href="{{ path("app_home_joke", {id: category.id}) }}">{{ category.name }}</a>
+                <a class="btn btn-dark mx-2" href="{{ path("app_home_categories", {id: category.id}) }}">{{ category.name }}</a>
             </li>
             {% endfor %}
         </ul>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-12 my-2">
-        <h1 class="fs-2"> Tous nos dernières blagues </h1>
-    </div>
-    {% for joke in jokes %}
-    <div class="col-md-12 border p-3 bg-dark text-white rounded my-1">
-        <h2 class="fs-4"> {{ joke.category }}</h2>
-        <p> {{ joke.description }}</p>
-        <hr>
-        <p> Par {{ joke.user.email }} </p>
-    </div>
-    {% endfor %}
-</div>
+{% include "home/show_jokes.html.twig" with {jokes: jokes} %}
+
 {% endblock %}
+
+
