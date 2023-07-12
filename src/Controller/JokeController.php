@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/joke')]
 class JokeController extends AbstractController
@@ -19,6 +20,16 @@ class JokeController extends AbstractController
     {
         return $this->render('joke/index.html.twig', [
             'jokes' => $jokeRepository->findBy(['user' => $this->getUser()]),
+        ]);
+    }
+
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/moderate', name: 'app_joke_moderate', methods: ['GET'])]
+    public function moderate(JokeRepository $jokeRepository): Response
+    {
+        return $this->render('joke/moderate.html.twig', [
+            'jokes' => $jokeRepository->findAll(),
         ]);
     }
 
@@ -54,7 +65,7 @@ class JokeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_joke_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Joke $joke, EntityManagerInterface $entityManager): Response
     {
-        if ($joke->getUser() !== $this->getUser()) {
+        if ($joke->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('app_home');
         }
 
@@ -76,7 +87,7 @@ class JokeController extends AbstractController
     #[Route('/{id}', name: 'app_joke_delete', methods: ['POST'])]
     public function delete(Request $request, Joke $joke, EntityManagerInterface $entityManager): Response
     {
-        if ($joke->getUser() !== $this->getUser()) {
+        if ($joke->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('app_home');
         }
 

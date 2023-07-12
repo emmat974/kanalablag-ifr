@@ -8,9 +8,13 @@
             <h2 class="fs-4"> {{ joke.category }}</h2>
             <p> {{ joke.description }}</p>
             <hr>
-            <p> Par {{ joke.user.email }} </p>
+            <p> Par {{ joke.user.pseudo }} </p>
         </div>
     </a>
+    {% else %}
+    <div class="col-md-12">
+        <p> Il semblerait qu'aucune blague n'a été créer pour cette catégorie,<a href="{{ path('app_joke_new') }}"> soyez le premier </a> </p>
+    </div>
     {% endfor %}
 
     <div class="navigation">

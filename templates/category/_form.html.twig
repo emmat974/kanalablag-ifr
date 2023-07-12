@@ -1,4 +1,10 @@
+<div class="row mt-3">
+    <div class="col-md-12 border rounded p-3 bg-light">
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+        <div class="d-grid gap-2 my-3">
+            <button class="btn btn-primary" type="submit">Valider</button>
+        </div>
 {{ form_end(form) }}
+    </div>
+</div>
