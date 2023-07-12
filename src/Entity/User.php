@@ -39,6 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Joke::class)]
     private Collection $jokes;
 
+    #[ORM\Column(length: 50)]
+    private ?string $pseudo = null;
+
     public function __construct()
     {
         $this->jokes = new ArrayCollection();
@@ -140,6 +143,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $joke->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }
