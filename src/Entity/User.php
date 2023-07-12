@@ -47,6 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->jokes = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getPseudo();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
